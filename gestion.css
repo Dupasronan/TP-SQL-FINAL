@@ -1,0 +1,92 @@
+body {
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+form {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="tel"],
+input[type="number"] {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-submit {
+    background-color: #000;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.btn-submit:hover {
+    background-color: #444;
+}
+
+.btn-delete {
+    background-color: #000;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #444;
+}
+
+a.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #000;
+    text-decoration: underline;
+}
+
+a.back-link:hover {
+    color: #444;
+}

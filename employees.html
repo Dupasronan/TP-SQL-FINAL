@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Employés</title>
+    <link rel="stylesheet" href="employees.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des Employés</h1>
+
+        <form method="GET" action="/employees" class="search-bar">
+            <input type="text" name="search" placeholder="Rechercher par nom ou prénom" class="search-input">
+            <button type="submit" class="search-button">Rechercher</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Date de naissance</th>
+                    <th>Date d'embauche</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Ville</th>
+                    <th>Code Postal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td>{{.EmployeeId}}</td>
+                    <td>{{.FirstName}}</td>
+                    <td>{{.LastName}}</td>
+                    <td>{{.BirthdayDate}}</td>
+                    <td>{{.HireDate}}</td>
+                    <td>{{.Mail}}</td>
+                    <td>{{.Phone}}</td>
+                    <td>{{.Address}}</td>
+                    <td>{{.City}}</td>
+                    <td>{{.PostalCode}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+        <a href="/" class="back-link">Retourner à l'accueil</a>
+    </div>
+</body>
+</html>
