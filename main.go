@@ -2,9 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"html/template"
 	"log"
 	"net/http"
+	"text/template"
 
 	_ "github.com/mattn/go-sqlite3"
 )
