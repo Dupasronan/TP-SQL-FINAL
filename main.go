@@ -38,6 +38,7 @@ func main() {
 
 	http.HandleFunc("/employees", employeesHandler)
 	http.HandleFunc("/add-employee", addEmployeeHandler)
+	http.HandleFunc("/delete-employee", deleteEmployeeHandler)
 
 	log.Println("Server starting on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -135,6 +136,24 @@ func addEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/employees", http.StatusSeeOther)
 	} else {
-		http.ServeFile(w, r, "add_employee.html")
+		http.ServeFile(w, r, "gestion.html")
+	}
+}
+
+func deleteEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		employeeId := r.FormValue("employee_id")
+
+		// Supprimer l'employé de la base de données
+		_, err := db.Exec("DELETE FROM employees WHERE EmployeeId = ?", employeeId)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/employees", http.StatusSeeOther)
+	} else {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 	}
 }

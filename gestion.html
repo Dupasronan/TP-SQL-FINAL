@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gérer un Employé</title>
+    <link rel="stylesheet" href="gestion.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gérer les Employés</h1>
+        
+        <h2>Ajouter un Employé</h2>
+        <form action="/add-employee" method="POST" class="form-group">
+            <label for="first_name">Prénom:</label>
+            <input type="text" name="first_name" required>
+            
+            <label for="last_name">Nom:</label>
+            <input type="text" name="last_name" required>
+            
+            <label for="birthday_date">Date de naissance:</label>
+            <input type="date" name="birthday_date" required>
+            
+            <label for="hire_date">Date d'embauche:</label>
+            <input type="date" name="hire_date" required>
+            
+            <label for="mail">E-mail:</label>
+            <input type="email" name="mail" required>
+            
+            <label for="phone">Téléphone:</label>
+            <input type="tel" name="phone" required>
+            
+            <label for="address">Adresse:</label>
+            <input type="text" name="address" required>
+            
+            <label for="city">Ville:</label>
+            <input type="text" name="city" required>
+            
+            <label for="postal_code">Code postal:</label>
+            <input type="text" name="postal_code" required>
+            
+            <label for="job_id">ID du poste:</label>
+            <input type="number" name="job_id" required>
+            
+            <label for="department_id">ID du département:</label>
+            <input type="number" name="department_id" required>
+            
+            <button type="submit" class="btn-submit">Ajouter</button>
+        </form>
+
+        <h2>Supprimer un Employé</h2>
+        <form action="/delete-employee" method="POST" class="form-group">
+            <label for="employee_id">ID de l'employé à supprimer:</label>
+            <input type="number" name="employee_id" required>
+
+            <button type="submit" class="btn-delete">Supprimer</button>
+        </form>
+
+        <a href="/" class="back-link">Retourner à l'accueil</a>
+    </div>
+</body>
+</html>
