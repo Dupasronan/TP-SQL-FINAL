@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
@@ -44,18 +44,20 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+var tmpl = template.Must(template.ParseFiles("employees.html"))
+
 func employeesHandler(w http.ResponseWriter, r *http.Request) {
 	searchQuery := r.URL.Query().Get("search")
 	var rows *sql.Rows
 	var err error
 
 	if searchQuery != "" {
-		query := `SELECT EmployeeId, FirstName, LastName, BirthdayDate, HireDate, Mail, Phone, Address, City, PostalCode, JobId, DepartmentId 
+		query := `SELECT EmployeeId, FirstName, LastName, BirthdayDate, HireDate, Mail, Phone, Address, City, PostalCode 
                   FROM employees 
                   WHERE FirstName LIKE ? OR LastName LIKE ?`
 		rows, err = db.Query(query, "%"+searchQuery+"%", "%"+searchQuery+"%")
 	} else {
-		rows, err = db.Query("SELECT * FROM employees")
+		rows, err = db.Query("SELECT EmployeeId, FirstName, LastName, BirthdayDate, HireDate, Mail, Phone, Address, City, PostalCode FROM employees")
 	}
 
 	if err != nil {
@@ -67,49 +69,18 @@ func employeesHandler(w http.ResponseWriter, r *http.Request) {
 	employees := []Employee{}
 	for rows.Next() {
 		var emp Employee
-		err := rows.Scan(&emp.EmployeeId, &emp.FirstName, &emp.LastName, &emp.BirthdayDate, &emp.HireDate, &emp.Mail, &emp.Phone, &emp.Address, &emp.City, &emp.PostalCode, &emp.JobId, &emp.DepartmentId)
+		err := rows.Scan(&emp.EmployeeId, &emp.FirstName, &emp.LastName, &emp.BirthdayDate, &emp.HireDate, &emp.Mail, &emp.Phone, &emp.Address, &emp.City, &emp.PostalCode)
 		if err != nil {
-			log.Println(err)
-			continue
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		employees = append(employees, emp)
 	}
 
-	html := `<table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th>Date de naissance</th>
-                <th>Date d'embauche</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Adresse</th>
-                <th>Ville</th>
-                <th>Code Postal</th>
-            </tr>
-        </thead>
-        <tbody>`
-
-	for _, emp := range employees {
-		html += fmt.Sprintf(`
-            <tr>
-                <td>%d</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-            </tr>`, emp.EmployeeId, emp.FirstName, emp.LastName, emp.BirthdayDate, emp.HireDate, emp.Mail, emp.Phone, emp.Address, emp.City, emp.PostalCode)
+	err = tmpl.Execute(w, employees)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-
-	html += `</tbody></table>`
-	w.Write([]byte(html))
 }
 
 func addEmployeeHandler(w http.ResponseWriter, r *http.Request) {
@@ -145,7 +116,6 @@ func deleteEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		employeeId := r.FormValue("employee_id")
 
-		// Supprimer l'employé de la base de données
 		_, err := db.Exec("DELETE FROM employees WHERE EmployeeId = ?", employeeId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
