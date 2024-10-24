@@ -4,20 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Employés</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Gestion des Employés</h1>
-        <nav class="mb-3">
-            <a href="/employees" class="btn btn-primary">Voir les employés</a>
-            <a href="/add-employee" class="btn btn-success">Ajouter un employé</a>
-        </nav>
+
+        <form method="GET" action="/employees" class="search-bar">
+            <input type="text" name="search" placeholder="Rechercher un employé par nom ou prénom" class="search-input">
+            <button type="submit" class="search-button">Rechercher</button>
+        </form>
+
+        <div class="button-group">
+            <a href="/employees" class="btn">Voir les employés</a>
+            <a href="/add-employee" class="btn">Ajouter un employé</a>
+        </div>
+
         <div id="employee-list">
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

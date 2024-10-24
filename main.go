@@ -34,7 +34,8 @@ func main() {
 	}
 	defer db.Close()
 
-	http.HandleFunc("/", homeHandler)
+	http.Handle("/", http.FileServer(http.Dir(".")))
+
 	http.HandleFunc("/employees", employeesHandler)
 	http.HandleFunc("/add-employee", addEmployeeHandler)
 
@@ -42,12 +43,20 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
-}
-
 func employeesHandler(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT * FROM employees")
+	searchQuery := r.URL.Query().Get("search")
+	var rows *sql.Rows
+	var err error
+
+	if searchQuery != "" {
+		query := `SELECT EmployeeId, FirstName, LastName, BirthdayDate, HireDate, Mail, Phone, Address, City, PostalCode, JobId, DepartmentId 
+                  FROM employees 
+                  WHERE FirstName LIKE ? OR LastName LIKE ?`
+		rows, err = db.Query(query, "%"+searchQuery+"%", "%"+searchQuery+"%")
+	} else {
+		rows, err = db.Query("SELECT * FROM employees")
+	}
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -65,7 +74,7 @@ func employeesHandler(w http.ResponseWriter, r *http.Request) {
 		employees = append(employees, emp)
 	}
 
-	html := `<table class="table table-striped">
+	html := `<table>
         <thead>
             <tr>
                 <th>ID</th>
